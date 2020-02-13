@@ -5,17 +5,17 @@ from numpy import linalg as la
 
 def img_to_matrix(im):
     width, height = im.size
-    im = im.convert("L")
+    im = im.convert("RGB")
     data = im.getdata()
-    data = np.matrix(data, dtype='float')
+    data = np.matrix(data, dtype='float')/255
     # new_data = np.reshape(data,(width,height))
-    new_data = np.reshape(data, (height, width))
+    new_data = np.reshape(data, (height, width*3))
     return new_data
 
 
 def matrix_to_img(data):
-    data = data*255
-    new_im = Image.fromarray(data.astype(np.uint8))
+    new_data = np.array(data).reshape(data.shape[0], int(data.shape[1]/3), 3)*255
+    new_im = Image.fromarray(new_data.astype(np.uint8))
     return new_im
 
 
@@ -36,5 +36,5 @@ def compress(filename, percent=0.3):
 
 if __name__ == "__main__":
 
-    img = compress("a.png", percent=0.9)
+    img = compress("t.jpg", percent=0.15)
     img.show()
