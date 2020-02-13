@@ -24,9 +24,13 @@ def compress(filename, percent=0.3):
     a = img_to_matrix(im)
 
     u, sigma, vt = la.svd(a)
-    s = np.zeros([u.shape[0], vt.shape[0]])
+    k = int(len(sigma)*percent)
+    # m*k, k*k, k*n
+    u = u[:, :k]
+    vt = vt[:k, :]
+    s = np.zeros([k, k])
 
-    for i in range(int(len(sigma)*percent)):
+    for i in range(k):
         s[i][i] = sigma[i]
     print(s)
     compressed_a = np.dot(np.dot(u, s), vt)
@@ -36,5 +40,5 @@ def compress(filename, percent=0.3):
 
 if __name__ == "__main__":
 
-    img = compress("t.jpg", percent=0.15)
+    img = compress("t.jpg", percent=0.01)
     img.show()
